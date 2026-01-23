@@ -1,0 +1,7 @@
+{
+  "name": "The Techys Studio - Memory Card Polaroids",
+  "description": "A premium e-commerce experience by The Techys Studio for custom digital polaroid cards that turn physical memories into interactive digital experiences.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
