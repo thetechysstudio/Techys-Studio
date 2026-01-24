@@ -25,6 +25,7 @@ export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            withCredentials: true,
         });
 
         if (!response.data) {
@@ -45,6 +46,7 @@ export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> 
             headers: {
                 'Content-Type': 'application/json',
             },
+            withCredentials: true,
         });
 
         if (!response.data) {
@@ -66,21 +68,27 @@ export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> 
 
 export const submitPersonalization = async (formData: FormData): Promise<any> => {
     const accessToken = localStorage.getItem("accessToken");
-    try {
-        const response = await axios.post(`${BACKEND_URL}/personalize/`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Authorization': `Bearer ${accessToken}`,
-            },
-        });
 
-        if (!response.data) {
-            throw new Error(`Error submitting personalization: ${response.statusText}`);
-        }
-        localStorage.setItem('order', "srdtfyghjkresdtfghjdfgh");
+    try {
+        const response = await axios.post(
+            `${BACKEND_URL}/personalize/`,
+            formData,
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                withCredentials: true,
+            }
+        );
+
+        localStorage.setItem("order", "srdtfyghjkresdtfghjdfgh");
         return response.data;
-    } catch (error) {
-        console.error('Failed to submit personalization:', error?.response?.data || error.message || error);
+
+    } catch (error: any) {
+        console.error(
+            "Failed to submit personalization:",
+            error?.response?.data || error.message || error
+        );
         throw error;
     }
 };

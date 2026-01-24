@@ -11,7 +11,7 @@ interface CustomizationProps {
   onBack: () => void;
   onNext: (order: OrderState) => void;
 }
-const BACKEND_URL = "http://api.shop.drmcetit.com"
+const BACKEND_URL = "https://api.shop.drmcetit.com"
 const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) => {
   const { planId } = useParams<{ planId: string }>();
   const navigate = useNavigate();

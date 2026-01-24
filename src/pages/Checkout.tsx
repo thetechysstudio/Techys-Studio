@@ -50,11 +50,8 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
     submissionData.append('state', formData.state);
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/delivery-details/`, {
-        headers: {
-          'bypass-tunnel-reminder': 'true'
-        },
-        body: submissionData
+      const response = await axios.post(`${BACKEND_URL}/delivery-details/`, submissionData, {
+        withCredentials: true,
       });
       console.log(response.data)
       if (!response.data) {
@@ -81,17 +78,22 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
 
   React.useEffect(() => {
     const fetchSummary = async () => {
+      const accessToken = localStorage.getItem("accessToken");
       setLoading(true);
       try {
         console.log("Calling order summary")
         const response = await axios.get(`${BACKEND_URL}/order-summary/`, {
-          headers: { 'bypass-tunnel-reminder': 'true' }
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
         });
         if (!response.data) throw new Error('Failed to fetch summary');
         console.log(response.data);
         setSummary(response.data);
       } catch (err) {
-        console.error(err);
+        console.error(err?.response?.data || err.message || err);
         setError('Could not load latest pricing. Using standard rates.');
       } finally {
         setLoading(false);

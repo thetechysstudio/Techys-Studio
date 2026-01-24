@@ -32,6 +32,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
               'Content-Type': 'application/json',
               //'credentials': 'include', // keep if backend uses cookies/session
             },
+            withCredentials: true,
           }
         );
         console.log(response.data);
