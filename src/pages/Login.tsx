@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const BACKEND_URL = "http://api.shop.drmcetit.com";
+const BACKEND_URL = "https://api.shop.drmcetit.com";
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const Login: React.FC = () => {
     setLoading(true);
     try {
       const res = await axios.post(`${BACKEND_URL}/api/login/`, {
-        username: email,
+        email: email,
         password: password,
       });
       localStorage.setItem("accessToken", res.data.access);
@@ -47,7 +47,7 @@ const Login: React.FC = () => {
 
           <form className="space-y-4" onSubmit={handleSubmit}>
             <input
-              type="text"
+              type="email"
               placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
