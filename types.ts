@@ -14,7 +14,7 @@ export interface ApiProduct {
 
 export interface ApiPlan {
   id: string;
-  tite: string; // Reflecting the typo in the provided API
+  title: string; // Reflecting the typo in the provided API
   description: string;
   custom: boolean;
   startingPrice: string;

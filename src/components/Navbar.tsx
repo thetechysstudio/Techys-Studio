@@ -10,7 +10,7 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ onBack, showCart = true }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
-  const [isLogined, setIsLogined] = useState(true) // Change to flase to test login button
+  const [isLogined, setIsLogined] = useState(false) // Change to flase to test login button
 
   const isHome = location.pathname === '/';
   const isProducts = location.pathname.startsWith('/product');

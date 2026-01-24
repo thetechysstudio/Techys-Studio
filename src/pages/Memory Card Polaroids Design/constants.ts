@@ -14,9 +14,10 @@ export const PHOTOS: PhotoData[] = [
     id: 2,
     url: 'https://picsum.photos/id/26/800/1000',
     title: 'Azure Solitude',
-    location: 'Santorini, Greece',
-    date: 'AUG 2023',
-    description: 'The deep blue of the Aegean sea meets the bright white of the Cycladic architecture.'
+    // subtitle (user Description)
+    description: 'The deep blue of the Aegean sea meets the bright white of the Cycladic architecture.', // (about card design)
+    location: 'Santorini, Greece', // tagline
+    date: 'AUG 2023', // Size Available (Small, Medium, Large)
   },
   {
     id: 3,

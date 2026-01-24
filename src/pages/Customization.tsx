@@ -1,19 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout.tsx';
 import PolaroidPreview from '../components/PolaroidPreview.tsx';
 import { OrderState, CardSize } from '../../types.ts';
 import { fetchSizes, fetchTemplates, submitPersonalization, SizeOption, TemplateOption } from '../services/api.ts';
 import { Upload, ChevronRight, Check, Tag } from 'lucide-react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 interface CustomizationProps {
   order: OrderState;
   onBack: () => void;
   onNext: (order: OrderState) => void;
 }
-const BACKEND_URL = process.env.BACKEND_URL
+const BACKEND_URL = "http://api.shop.drmcetit.com"
 const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) => {
   const { planId } = useParams<{ planId: string }>();
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [localOrder, setLocalOrder] = useState<OrderState>(order);
   const [sizes, setSizes] = useState<SizeOption[]>([]);
@@ -28,6 +29,13 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      navigate("/login");
+    }
+  }, [navigate]);
 
   React.useEffect(() => {
     const loadSizes = async () => {
@@ -124,7 +132,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                       <button
                         key={s.label}
                         onClick={() => handleUpdate({ size: s.label as CardSize })}
-                        className={`relative flex flex-col p-6 rounded-2xl border transition-all text-left ${localOrder.size === s.label
+                        className={`relative cursor-pointer flex flex-col p-6 rounded-2xl border transition-all text-left ${localOrder.size === s.label
                           ? 'border-stone-900 bg-stone-50 ring-1 ring-stone-900'
                           : 'border-stone-100 hover:border-stone-300'
                           }`}
@@ -160,12 +168,12 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                       <button
                         key={t.id}
                         onClick={() => handleUpdate({ templateId: t.id })}
-                        className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition-all ${localOrder.templateId === t.id
+                        className={`relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${localOrder.templateId === t.id
                           ? 'border-stone-900 shadow-xl'
                           : 'border-transparent opacity-60 hover:opacity-100'
                           }`}
                       >
-                        <img src={t.image} alt={t.title} className="w-full h-full object-cover" />
+                        <img src={BACKEND_URL + t.image} alt={t.title} className="w-full h-full object-cover" />
                         <div className="absolute inset-x-0 bottom-0 bg-stone-900/60 backdrop-blur-sm p-2 text-white text-[10px] text-center uppercase tracking-widest">
                           {t.title}
                         </div>
@@ -206,7 +214,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                       <input type="text" value={localOrder.title} onChange={(e) => handleUpdate({ title: e.target.value })} placeholder="Title" className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl outline-none" />
                       <textarea rows={2} value={localOrder.description} onChange={(e) => handleUpdate({ description: e.target.value })} placeholder="Description" className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl outline-none resize-none" />
                       <input type="text" value={localOrder.tagline} onChange={(e) => handleUpdate({ tagline: e.target.value })} placeholder="Tagline" className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl outline-none" />
-                      <input type="number" min={1} value={localOrder.quantity} onChange={(e) => handleUpdate({ quantity: parseInt(e.target.value) || 1 })} className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl outline-none" />
+                      <input type="number" value={localOrder.quantity} onChange={(e) => handleUpdate({ quantity: parseInt(e.target.value) })} className="w-full px-4 py-3 bg-white border border-stone-200 rounded-xl outline-none" />
                     </div>
                   </div>
                 </div>
@@ -214,7 +222,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
             </div>
 
             <div className="flex justify-between items-center pt-8 border-t border-stone-100">
-              <button onClick={() => step === 1 ? onBack() : setStep(step - 1)} className="text-stone-400 hover:text-stone-800 transition-colors text-sm">
+              <button onClick={() => step === 1 ? onBack() : setStep(step - 1)} className="text-stone-400 cursor-pointer hover:text-stone-800 transition-colors text-sm">
                 {step === 1 ? 'Cancel' : 'Go Back'}
               </button>
               <button
@@ -272,7 +280,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                     setLoadingTemplates(false);
                   }
                 }}
-                className="px-8 py-3 bg-stone-900 text-white rounded-full font-medium flex items-center gap-2 disabled:opacity-30 hover:bg-stone-800 transition-all shadow-lg"
+                className="px-8 py-3 cursor-pointer bg-stone-900 text-white rounded-full font-medium flex items-center gap-2 disabled:opacity-30 hover:bg-stone-800 transition-all shadow-lg"
               >
                 {isSubmitting ? (
                   <>

@@ -13,6 +13,7 @@ import Signup from './src/pages/Signup.tsx';
 import Orders from './src/pages/Orders.tsx';
 import Hero from './src/components/Hero.tsx';
 import Main from './src/pages/Memory Card Polaroids Design/Main.tsx';
+import Scan from './src/pages/Music Card/Scan.tsx';
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const AppContent: React.FC = () => {
 
   const handlePlanSelect = (plan: ApiPlan) => {
     if (plan.custom) {
-      alert(`Our team will reach out for the "${plan.tite}" consultation.`);
+      alert(`Our team will reach out for the "${plan.title}" consultation.`);
       return;
     }
     setOrder(prev => ({ ...prev, plan }));
@@ -49,6 +50,7 @@ const AppContent: React.FC = () => {
       <Routes>
         <Route path="/" element={
           <Hero />
+          // <Scan/>
         } />
 
         <Route path="/home" element={
@@ -73,7 +75,7 @@ const AppContent: React.FC = () => {
           <Plans onBack={() => navigate('/product')} onSelectPlan={handlePlanSelect} />
         } />
         <Route path="/customization/:planId" element={
-          <Customization order={order} onBack={() => navigate('/plans')} onNext={handleCompleteCustomization} />
+          <Customization order={order} onBack={() => navigate('/plans/1')} onNext={handleCompleteCustomization} />
         } />
         <Route path="/checkout" element={
           <Checkout order={order} onBack={() => navigate('/customization')} onConfirm={handleCompleteCheckout} />
@@ -88,6 +90,9 @@ const AppContent: React.FC = () => {
 
         <Route path='/memory-card-designs' element={
           <Main/>
+        } />
+        <Route path='/music-card-scan' element={
+          <Scan/>
         } />
 
       </Routes>

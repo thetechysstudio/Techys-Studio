@@ -4,10 +4,9 @@ import axios from 'axios';
 export async function fetchCookies(): Promise<any> {
   try {
     const response = await axios.get(
-      'https://api-techys-studio.loca.lt/cookies/',
+      'https://api.shop.drmcetit.com/api/cookies/',
       {
         headers: {
-          'bypass-tunnel-reminder': 'true',
           'Content-Type': 'application/json',
         },
         withCredentials: true, // keep this if cookies/session are used

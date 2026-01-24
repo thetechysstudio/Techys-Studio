@@ -8,11 +8,10 @@ import axios from 'axios';
 
 interface ProductDetailProps {
   onBack: () => void;
-  onChoosePlan: () => void;
   singleMode?: boolean;
 }
-const BACKEND_URL = "https://api-techys-studios.loca.lt"
-const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, onChoosePlan, singleMode = false }) => {
+const BACKEND_URL = "https://api.shop.drmcetit.com/api"
+const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = false }) => {
   const navigate = useNavigate();
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,10 +21,9 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, onChoosePlan, sin
       try {
         const response = await axios.get(`${BACKEND_URL}/products/`, {
           headers: {
-            'bypass-tunnel-reminder': 'true',
+            'Content-Type': 'application/json',
           },
         });
-
         if (!response.data) throw new Error('Failed to fetch products');
 
         const data: ApiProduct[] = response.data;
@@ -150,7 +148,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, onChoosePlan, sin
                       onClick={() => {
                         navigate(`/plans/${product.id}`);
                       }}
-                      className="w-full py-5 rounded-2xl bg-stone-900 text-white font-semibold text-base md:text-lg shadow-lg hover:bg-stone-800 active:scale-[0.99] transition-all"
+                      className="w-full py-5 cursor-pointer rounded-2xl bg-stone-900 text-white font-semibold text-base md:text-lg shadow-lg hover:bg-stone-800 active:scale-[0.99] transition-all"
                     >
                       Choose Your Plan
                     </button>

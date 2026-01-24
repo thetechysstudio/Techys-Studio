@@ -16,7 +16,7 @@ interface ConfirmationData {
   state: string;
   pincode: string;
 }
-const BACKEND_URL = "https://api-techys-studios.loca.lt"
+const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 const Confirmation: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<ConfirmationData | null>(null);
@@ -67,7 +67,7 @@ const Confirmation: React.FC = () => {
   }, [navigate]);
 
   const sendWhatsApp = (data: any) => {
-    const phone = 9345857852; 
+    const phone = 9345857852;
 
     const message = `
 Order Confirmed ✅
@@ -90,11 +90,11 @@ ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.p
     window.open(url, "_blank");
   };
 
-// useEffect(() => {
-//   if (data?.whatsapp) {
-//     sendWhatsApp(data);
-//   }
-// }, [data]);
+  // useEffect(() => {
+  //   if (data?.whatsapp) {
+  //     sendWhatsApp(data);
+  //   }
+  // }, [data]);
 
 
   if (loading || !data) {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_URL = "https://api-techys-studios.loca.lt"
+const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 
 export interface SizeOption {
     id: string; // Added ID as it likely exists and is needed
@@ -21,10 +21,9 @@ export interface TemplateOption {
 
 export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/size/${planId}`, {
+        const response = await axios.get(`${BACKEND_URL}/size/${planId}/`, {
             headers: {
                 'Content-Type': 'application/json',
-                'bypass-tunnel-reminder': 'true',
             },
         });
 
@@ -42,10 +41,9 @@ export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
 
 export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> => {
     try {
-        const response = await axios.get(`${BACKEND_URL}/template/${sizeId}`, {
+        const response = await axios.get(`${BACKEND_URL}/template/${sizeId}/`, {
             headers: {
                 'Content-Type': 'application/json',
-                'bypass-tunnel-reminder': 'true',
             },
         });
 
@@ -67,11 +65,12 @@ export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> 
 };
 
 export const submitPersonalization = async (formData: FormData): Promise<any> => {
+    const accessToken = localStorage.getItem("accessToken");
     try {
         const response = await axios.post(`${BACKEND_URL}/personalize/`, formData, {
             headers: {
-                // Do NOT set Content-Type for FormData, browser sets it with boundary
-                'bypass-tunnel-reminder': 'true',
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${accessToken}`,
             },
         });
 
@@ -81,7 +80,7 @@ export const submitPersonalization = async (formData: FormData): Promise<any> =>
         localStorage.setItem('order', "srdtfyghjkresdtfghjdfgh");
         return response.data;
     } catch (error) {
-        console.error('Failed to submit personalization:', error);
+        console.error('Failed to submit personalization:', error?.response?.data || error.message || error);
         throw error;
     }
 };

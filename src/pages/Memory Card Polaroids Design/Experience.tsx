@@ -25,12 +25,43 @@ const Experience: React.FC = () => {
       if (focusedId) return;
       // Scroll speed sensitivity
       targetScroll.current += e.deltaY * 0.008;
-      
+
       // Keep within bounds
       targetScroll.current = Math.max(-1, Math.min(targetScroll.current, totalWidth + 1));
     };
+
+    let touchStartX = 0;
+    let touchPreviousX = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (focusedId) return;
+      touchStartX = e.touches[0].clientX;
+      touchPreviousX = e.touches[0].clientX;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (focusedId) return;
+      const currentX = e.touches[0].clientX;
+      const deltaX = touchPreviousX - currentX;
+
+      // Adjust sensitivity for touch (usually requires higher multiplier than wheel)
+      targetScroll.current += deltaX * 0.05;
+
+      // Keep within bounds
+      targetScroll.current = Math.max(-1, Math.min(targetScroll.current, totalWidth + 1));
+
+      touchPreviousX = currentX;
+    };
+
     window.addEventListener('wheel', handleWheel, { passive: true });
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      window.removeEventListener('touchstart', handleTouchStart);
+      window.removeEventListener('touchmove', handleTouchMove);
+    };
   }, [focusedId, totalWidth]);
 
   useFrame((state, delta) => {
@@ -38,7 +69,7 @@ const Experience: React.FC = () => {
 
     // Smooth inertial scrolling
     scrollRef.current = THREE.MathUtils.lerp(scrollRef.current, targetScroll.current, 0.08);
-    
+
     if (groupRef.current) {
       // Offset the entire group so that it slides horizontally
       groupRef.current.position.x = -scrollRef.current;
@@ -66,15 +97,15 @@ const Experience: React.FC = () => {
       </group>
 
       {/* Visual grounding: Soft shadows on a floor plane */}
-      <ContactShadows 
-        position={[0, -4.5, 0]} 
-        opacity={0.3} 
-        scale={40} 
-        blur={2} 
-        far={10} 
+      <ContactShadows
+        position={[0, -4.5, 0]}
+        opacity={0.3}
+        scale={40}
+        blur={2}
+        far={10}
         color="#000000"
       />
-      
+
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -4.51, 0]} receiveShadow>
         <planeGeometry args={[100, 100]} />
         <meshStandardMaterial color="#fdfbf7" roughness={1} />

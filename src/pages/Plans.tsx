@@ -11,7 +11,7 @@ interface PlansProps {
   onBack: () => void;
   onSelectPlan: (plan: ApiPlan) => void;
 }
-const BACKEND_URL = "https://api-techys-studios.loca.lt"
+const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
   const { id } = useParams<{ id: string }>();
   const [plans, setPlans] = useState<ApiPlan[]>([]);
@@ -26,13 +26,12 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
     const fetchPlans = async () => {
       try {
         const response = await axios.get(
-          `${BACKEND_URL}/plans/${id}`,
+          `${BACKEND_URL}/plans/${id}/`,
           {
             headers: {
               'Content-Type': 'application/json',
-              'bypass-tunnel-reminder': 'true',
+              //'credentials': 'include', // keep if backend uses cookies/session
             },
-            //credentials: 'include', // keep if backend uses cookies/session
           }
         );
         console.log(response.data);
@@ -85,7 +84,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
                   </div>
                 )}
                 <div className="mb-8">
-                  <h3 className="text-3xl font-serif mb-3 capitalize">{plan.tite}</h3>
+                  <h3 className="text-3xl font-serif mb-3 capitalize">{plan.title}</h3>
                   <p className="text-stone-400 text-sm font-light leading-relaxed min-h-[3rem]">{plan.description}</p>
                 </div>
                 <div className="flex items-baseline gap-1 mb-10 border-b border-stone-100 pb-8">
@@ -105,14 +104,14 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
                 </div>
                 <button
                   onClick={() => onSelectPlan(plan)}
-                  className={`w-full py-4 rounded-2xl font-medium flex items-center justify-center gap-3 transition-all active:scale-95 ${plan.custom
+                  className={`w-full py-4 cursor-pointer rounded-2xl font-medium flex items-center justify-center gap-3 transition-all active:scale-95 ${plan.custom
                     ? 'bg-stone-100 text-stone-800 hover:bg-stone-200'
                     : plan.mostPopular
                       ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-xl '
                       : 'bg-stone-900 text-white hover:bg-stone-800'
                     }`}
                 >
-                  {plan.custom ? <><MessageSquare size={20} />Contact Support</> : <>Select {plan.tite}<ArrowRight size={20} /></>}
+                  {plan.custom ? <><MessageSquare size={20} />Contact Support</> : <>Select {plan.title}<ArrowRight size={20} /></>}
                 </button>
               </div>
             ))

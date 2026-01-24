@@ -26,14 +26,14 @@ const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
         <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto px-4">
           <button
             onClick={onShopNow}
-            className="px-12 py-3 bg-[#33302e] text-white rounded-full font-medium hover:bg-stone-800 transition-all flex items-center justify-center gap-3 group shadow-xl shadow-stone-200"
+            className="px-12 py-3 cursor-pointer bg-[#33302e] text-white rounded-full font-medium hover:bg-stone-800 transition-all flex items-center justify-center gap-3 group shadow-xl shadow-stone-200"
           >
             <span className="text-base">View Product</span>
             <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
           </button>
           <button
             onClick={() => window.location.href = '/#/memory-card-designs'}
-            className="px-12 py-3 bg-white border border-stone-200 text-stone-800 rounded-full font-medium hover:bg-stone-50 transition-all shadow-sm"
+            className="px-12 py-3 cursor-pointer bg-white border border-stone-200 text-stone-800 rounded-full font-medium hover:bg-stone-50 transition-all shadow-sm"
           >
             <span className="text-base">Explore Designs</span>
           </button>

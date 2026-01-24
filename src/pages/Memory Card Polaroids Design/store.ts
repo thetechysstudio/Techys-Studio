@@ -1,23 +1,13 @@
-
-import { useState, useCallback } from 'react';
+import { create } from 'zustand';
 import { AppState } from './types';
 
-export const useAppState = (): AppState => {
-  const [focusedId, setFocusedIdState] = useState<number | null>(null);
-  const [hoveredId, setHoveredIdState] = useState<number | null>(null);
+// Extend AppState to match the store signature if needed, 
+// or simply use the interface if it matches exactly.
+interface AppStore extends AppState { }
 
-  const setFocusedId = useCallback((id: number | null) => {
-    setFocusedIdState(id);
-  }, []);
-
-  const setHoveredId = useCallback((id: number | null) => {
-    setHoveredIdState(id);
-  }, []);
-
-  return {
-    focusedId,
-    setFocusedId,
-    hoveredId,
-    setHoveredId
-  };
-};
+export const useAppState = create<AppStore>((set) => ({
+  focusedId: null,
+  hoveredId: null,
+  setFocusedId: (id) => set({ focusedId: id }),
+  setHoveredId: (id) => set({ hoveredId: id }),
+}));

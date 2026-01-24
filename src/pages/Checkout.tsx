@@ -11,7 +11,7 @@ interface CheckoutProps {
   onBack: () => void;
   onConfirm: (details: CustomerDetails) => void;
 }
-const BACKEND_URL = "https://api-techys-studios.loca.lt"
+const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 
 const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
   const navigate = useNavigate();
@@ -166,7 +166,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
                   {(summary?.templateUrl || order.imageUrl) && <img src={summary?.templateUrl || order.imageUrl} className="w-full h-full object-cover" />}
                 </div>
                 <div>
-                  <h4 className="font-medium">{summary?.planTitle }</h4>
+                  <h4 className="font-medium">{summary?.planTitle}</h4>
                   <p className="text-xs text-stone-400">{summary?.size || order.size} Card • Qty: {summary?.quantity || order.quantity}</p>
                   <p className="text-stone-900 font-medium">{unitPrice} rs / unit</p>
                 </div>

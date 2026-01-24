@@ -12,7 +12,7 @@ const Main: React.FC = () => {
   const { focusedId, setFocusedId } = useAppState();
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden" style={{ touchAction: 'none' }}>
 
       {/* Header UI */}
       <div className="absolute top-8 left-10 flex gap-4 items-center z-20 ">
@@ -25,25 +25,10 @@ const Main: React.FC = () => {
         </div>
       </div>
       {/* Cinematic UI Overlay */}
-      <div
-        className={`fixed inset-0 z-10 pointer-events-none transition-all duration-1000 ${focusedId ? 'bg-black/40 backdrop-blur-md opacity-100' : 'bg-transparent opacity-0'
-          }`}
-      />
+
 
       {/* Close Button (Focus Mode) */}
-      {focusedId && (
-        <button
-          onClick={() => setFocusedId(null)}
-          className="absolute top-8 right-10 z-30 pointer-events-auto flex items-center gap-2 group cursor-pointer"
-        >
-          <span className="text-sm font-medium uppercase tracking-widest text-[#1a1a1a] group-hover:mr-2 transition-all">Close</span>
-          <div className="w-8 h-8 rounded-full border border-black flex items-center justify-center transition-transform group-hover:rotate-90">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-              <path d="M1 1L11 11M11 1L1 11" stroke="black" strokeWidth="1.5" />
-            </svg>
-          </div>
-        </button>
-      )}
+
 
       {/* Scroll Hint (Gallery Mode) */}
       {!focusedId && (
