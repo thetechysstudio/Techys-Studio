@@ -216,7 +216,7 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             anchorX="left"
             font="/fonts/Poppins-Regular.ttf"
           >
-            Subtitle
+            {data.subtitle}
           </Text>
 
           {/* TAGLINE */}
@@ -227,7 +227,7 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             anchorX="left"
             font="/fonts/Poppins-Regular.ttf"
           >
-            Tagline
+            {data.tagline}
           </Text>
 
         </group>
@@ -242,7 +242,7 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             {data.title}
           </Text>
           <Text position={[0, 0.8, 0.01]} fontSize={0.12} color="#666" letterSpacing={0.1}>
-            {data.location} • {data.date}
+            {data.tagline} • {data.size}
           </Text>
           <Text position={[0, -0.3, 0.01]} fontSize={0.14} color="#333" maxWidth={2.8} textAlign="center" lineHeight={1.5}>
             {data.description}

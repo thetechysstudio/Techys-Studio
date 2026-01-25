@@ -1,11 +1,7 @@
-import { create } from 'zustand';
-import { AppState } from './types';
+import { create } from "zustand";
+import type { AppState } from "./types";
 
-// Extend AppState to match the store signature if needed, 
-// or simply use the interface if it matches exactly.
-interface AppStore extends AppState { }
-
-export const useAppState = create<AppStore>((set) => ({
+export const useAppState = create<AppState>((set) => ({
   focusedId: null,
   hoveredId: null,
   setFocusedId: (id) => set({ focusedId: id }),

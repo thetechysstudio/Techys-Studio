@@ -68,7 +68,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
       console.log('Delivery details submitted successfully');
       onConfirm(formData);
     } catch (err) {
-      console.error('Submission failed', err?.response?.data || err.message || err);
+      console.error('Submission failed', err?.response?.data || err.message || err || err.data.error);
       errorStatus(err);
       // Optional: Show error to user
       alert('Failed to submit delivery details. Please try again.');

@@ -1,11 +1,11 @@
-
 export interface PhotoData {
   id: number;
-  url: string;
+  url: string;        // mapped from API: image
   title: string;
-  location: string;
-  date: string;
+  subtitle: string;   // mapped from API: subtile
   description: string;
+  tagline: string;    // keep as tagline
+  size: string;       // keep as size
 }
 
 export interface AppState {

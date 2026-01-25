@@ -4,20 +4,40 @@ import React, { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { ContactShadows, Environment } from '@react-three/drei';
 import * as THREE from 'three';
-import { PHOTOS } from './constants';
+import { fetchPhotos } from './constants';
 import Polaroid from './Polaroids';
 import { useAppState } from './store';
+import { PhotoData } from './types';
 
 const Experience: React.FC = () => {
+  const [photos, setPhotos] = React.useState<PhotoData[]>([]);
   const { focusedId } = useAppState();
   const scrollRef = useRef(0);
   const targetScroll = useRef(0);
   const groupRef = useRef<THREE.Group>(null);
   const { viewport } = useThree();
 
+  // Fetch API data once
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchPhotos()
+      .then((data) => {
+        if (!isMounted) return;
+        setPhotos(data);
+      })
+      .catch((err) => {
+        console.error("Cards fetch error:", err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Spacing between photos
   const spacing = 4.5;
-  const totalWidth = (PHOTOS.length - 1) * spacing;
+  const totalWidth = (photos.length - 1) * spacing;
 
   // Handle horizontal scroll on vertical wheel
   useEffect(() => {
@@ -86,7 +106,7 @@ const Experience: React.FC = () => {
       <spotLight position={[-10, 10, 20]} angle={0.2} penumbra={1} intensity={1} castShadow />
 
       <group ref={groupRef}>
-        {PHOTOS.map((photo, index) => (
+        {photos.map((photo, index) => (
           <Polaroid
             key={photo.id}
             index={index}

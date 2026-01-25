@@ -71,7 +71,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
           <h1 className="text-4xl md:text-6xl font-serif">Select Your Plan</h1>
           <p className="text-stone-500 font-light leading-relaxed">Choose how you want your story to be told.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mx-auto">
           {Array.isArray(plans) &&
             plans.map((plan) => (
               <div
@@ -115,7 +115,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
                       : 'bg-stone-900 text-white hover:bg-stone-800'
                     }`}
                 >
-                  {plan.custom ? <><MessageSquare size={20} />Contact Support</> : <>Select {plan.title}<ArrowRight size={20} /></>}
+                  {plan.custom ? <><MessageSquare size={20} />Contact Support</> : <> {plan.title}<ArrowRight size={20} /></>}
                 </button>
               </div>
             ))

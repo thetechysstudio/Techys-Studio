@@ -1,69 +1,84 @@
+import { PhotoData } from "./types";
 
-import { PhotoData } from './types';
+const API_URL = "https://api.shop.drmcetit.com/api/cards/";
+const BACKEND_URL = "https://api.shop.drmcetit.com";
 
-export const PHOTOS: PhotoData[] = [
-  {
-    id: 1,
-    url: 'https://picsum.photos/id/10/800/1000',
-    title: 'Silent Peaks',
-    location: 'Swiss Alps',
-    date: 'OCT 2023',
-    description: 'A moment of stillness above the clouds where the only sound is the whisper of the wind.'
-  },
-  {
-    id: 2,
-    url: 'https://picsum.photos/id/26/800/1000',
-    title: 'Azure Solitude',
-    // subtitle (user Description)
-    description: 'The deep blue of the Aegean sea meets the bright white of the Cycladic architecture.', // (about card design)
-    location: 'Santorini, Greece', // tagline
-    date: 'AUG 2023', // Size Available (Small, Medium, Large)
-  },
-  {
-    id: 3,
-    url: 'https://picsum.photos/id/28/800/1000',
-    title: 'Golden Hour',
-    location: 'Kyoto, Japan',
-    date: 'NOV 2023',
-    description: 'Autumn leaves catching the last light of the day near the Kiyomizu-dera temple.'
-  },
-  {
-    id: 4,
-    url: 'https://picsum.photos/id/29/800/1000',
-    title: 'Desert Mirage',
-    location: 'Sahara, Morocco',
-    date: 'JAN 2024',
-    description: 'Endless dunes shifting under the relentless sun, a landscape of eternal change.'
-  },
-  {
-    id: 5,
-    url: 'https://picsum.photos/id/54/800/1000',
-    title: 'Coastal Echoes',
-    location: 'Big Sur, California',
-    date: 'MAY 2023',
-    description: 'Where the rugged cliffs meet the untamed Pacific, a boundary of pure energy.'
-  },
-  {
-    id: 6,
-    url: 'https://picsum.photos/id/64/800/1000',
-    title: 'Emerald Canopy',
-    location: 'Amazon, Brazil',
-    date: 'MAR 2023',
-    description: 'The breathing heart of our planet, dense with life and hidden mysteries.'
-  },
-  {
-    id: 7,
-    url: 'https://picsum.photos/id/76/800/1000',
-    title: 'Nordic Light',
-    location: 'Lofoten, Norway',
-    date: 'DEC 2023',
-    description: 'Chasing the aurora borealis across the jagged mountains of the Arctic circle.'
+/**
+ * If you're running locally and want to avoid CORS for /media,
+ * add a Vite proxy:
+ *  server: { proxy: { "/media": { target: "https://api.shop.drmcetit.com", changeOrigin: true, secure: true } } }
+ *
+ * Then keep USE_MEDIA_PROXY_IN_DEV = true while on localhost.
+ */
+const USE_MEDIA_PROXY_IN_DEV = true;
+
+type CardApiItem = {
+  id: number;
+  image: string | null;     // "/media/..." or full url
+  title: string | null;
+  subtile: string | null;   // backend key is "subtile"
+  description: string | null;
+  tagline: string | null;
+  size: string | null;
+};
+
+const isLocalhost = () =>
+  typeof window !== "undefined" &&
+  (window.location.hostname === "localhost" ||
+    window.location.hostname === "127.0.0.1");
+
+const normalizeImageUrl = (image: string | null) => {
+  if (!image) return "https://picsum.photos/800/1000";
+
+  // Already absolute
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    // If it's the same backend and we're on localhost, rewrite to /media/... to use Vite proxy
+    if (
+      USE_MEDIA_PROXY_IN_DEV &&
+      isLocalhost() &&
+      image.startsWith(`${BACKEND_URL}/media/`)
+    ) {
+      return image.replace(BACKEND_URL, ""); // => "/media/..."
+    }
+    return image;
   }
-];
+
+  // Relative from backend, typically "/media/..."
+  if (image.startsWith("/media/")) {
+    // On localhost, prefer proxy to avoid CORS
+    if (USE_MEDIA_PROXY_IN_DEV && isLocalhost()) return image; // "/media/..."
+    // In production build, use full backend URL
+    return `${BACKEND_URL}${image}`;
+  }
+
+  // Any other relative path
+  if (USE_MEDIA_PROXY_IN_DEV && isLocalhost()) return `/${image.replace(/^\/+/, "")}`;
+  return `${BACKEND_URL}/${image.replace(/^\/+/, "")}`;
+};
+
+export const fetchPhotos = async (): Promise<PhotoData[]> => {
+  const res = await fetch(API_URL);
+
+  if (!res.ok) {
+    throw new Error(`Failed to fetch cards: ${res.status} ${res.statusText}`);
+  }
+
+  const data: CardApiItem[] = await res.json();
+
+  return (data ?? []).map((item) => ({
+    id: item.id,
+    url: normalizeImageUrl(item.image),
+    title: item.title ?? "",
+    subtitle: item.subtile ?? "",       // API "subtile" -> UI "subtitle"
+    description: item.description ?? "",
+    tagline: item.tagline ?? "",
+    size: item.size ?? "",
+  }));
+};
 
 export const COLORS = {
-  paper: '#fdfbf7',
-  frame: '#ffffff',
-  text: '#1a1a1a',
-  accent: '#e63946'
+  paper: "#fdfbf7",
+  frame: "#ffffff",
+  text: "#1a1a1a",
+  accent: "#e63946",
 };

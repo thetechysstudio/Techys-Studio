@@ -504,22 +504,20 @@ const OrdersDetails: React.FC = () => {
                                     This order is a memory gift product. If a template is available,
                                     it will be applied during rendering.
                                 </p>
-                                <div className="mt-3 flex items-center gap-2">
-                                    <span className="text-sm text-gray-900">Template:</span>
-
+                                <p className="mt-3 text-sm text-gray-900">Template:</p>
+                                <div className="mt-1">
                                     {orderDetails?.templateUrl ? (
-                                        <a
-                                            href={templateDownloadUrl}
-                                            download
-                                            className="inline-flex items-center rounded-full border border-black/10 bg-white px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-50 transition"
+                                        <button
+                                            onClick={() => window.open(templateDownloadUrl, "_blank")}
+                                            className="inline-flex w-full items-center rounded-lg border border-black/10 bg-black px-4 py-3 text-center text-sm font-medium text-white shadow-sm cursor-pointer transition"
                                         >
-                                            Download
-                                        </a>
+                                            View Template
+                                        </button>
                                     ) : (
                                         <button
                                             type="button"
                                             disabled
-                                            className="inline-flex cursor-pointer items-center rounded-full border border-black/10 bg-gray-100 px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed"
+                                            className="inline-flex cursor-pointer w-full items-center rounded-lg border border-black/10 bg-gray-100 px-4 py-3 text-center text-sm font-medium text-gray-400 cursor-not-allowed"
                                         >
                                             Not set
                                         </button>
