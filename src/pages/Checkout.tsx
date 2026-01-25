@@ -5,6 +5,7 @@ import { SIZES } from '../../constants.ts';
 import { CreditCard, Truck, ShieldCheck, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useErrorStatus } from '../services/errorStatus.ts';
 
 interface CheckoutProps {
   order: OrderState;
@@ -12,8 +13,8 @@ interface CheckoutProps {
   onConfirm: (details: CustomerDetails) => void;
 }
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
-
 const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
+  const { errorStatus } = useErrorStatus();
   const navigate = useNavigate();
   const [formData, setFormData] = useState<CustomerDetails>({
     doorNoAndStreet: '',
@@ -39,6 +40,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const accessToken = localStorage.getItem("accessToken");
     setSubmitting(true);
 
     // Create FormData manually to match the requested API
@@ -52,6 +54,10 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
     try {
       const response = await axios.post(`${BACKEND_URL}/delivery-details/`, submissionData, {
         withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
       console.log(response.data)
       if (!response.data) {
@@ -62,7 +68,8 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
       console.log('Delivery details submitted successfully');
       onConfirm(formData);
     } catch (err) {
-      console.error('Submission failed', err);
+      console.error('Submission failed', err?.response?.data || err.message || err);
+      errorStatus(err);
       // Optional: Show error to user
       alert('Failed to submit delivery details. Please try again.');
     } finally {
@@ -94,6 +101,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
         setSummary(response.data);
       } catch (err) {
         console.error(err?.response?.data || err.message || err);
+        errorStatus(err);
         setError('Could not load latest pricing. Using standard rates.');
       } finally {
         setLoading(false);
@@ -132,7 +140,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
               <input name="pincode" value={formData.pincode} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="Pincode" />
               <input name="state" value={formData.state} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="State" />
             </div>
-            <button type="submit" disabled={!isFormValid || submitting} className="w-full py-4 bg-stone-900 text-white rounded-xl font-medium shadow-xl disabled:opacity-50 flex items-center justify-center gap-2">
+            <button type="submit" disabled={!isFormValid || submitting} className="w-full cursor-pointer py-4 bg-stone-900 text-white rounded-xl font-medium shadow-xl disabled:opacity-50 flex items-center justify-center gap-2">
               <CreditCard size={20} /> {submitting ? 'Processing...' : "Confirm"}
               {/* <CreditCard size={20} /> {submitting ? 'Processing...' : `Pay ${Math.round(finalTotal)} rs`} */}
             </button>
@@ -165,10 +173,10 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
             <>
               <div className="flex gap-4">
                 <div className="w-20 h-20 bg-stone-200 rounded-lg overflow-hidden">
-                  {(summary?.templateUrl || order.imageUrl) && <img src={summary?.templateUrl || order.imageUrl} className="w-full h-full object-cover" />}
+                  {(summary?.templateUrl || order.imageUrl) && <img src={`https://api.shop.drmcetit.com/${summary?.templateUrl || order.imageUrl}`} className="w-full h-full object-cover" />}
                 </div>
                 <div>
-                  <h4 className="font-medium">{summary?.planTitle}</h4>
+                  <h4 className="font-medium">{summary?.productTitle} - {summary?.planTitle}</h4>
                   <p className="text-xs text-stone-400">{summary?.size || order.size} Card • Qty: {summary?.quantity || order.quantity}</p>
                   <p className="text-stone-900 font-medium">{unitPrice} rs / unit</p>
                 </div>

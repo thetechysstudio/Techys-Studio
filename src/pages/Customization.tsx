@@ -263,7 +263,8 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                       formData.append('description', localOrder.description);
                       formData.append('quantity', localOrder.quantity.toString());
                       formData.append('tagline', localOrder.tagline);
-                      formData.append('templateUrl', localOrder.image);
+                      const selectedTemplate = JSON.parse(localStorage.getItem('selectedTemplate') || '{}');
+                      formData.append('templateUrl', selectedTemplate?.image);
 
                       if (videoFile) formData.append('video', videoFile);
                       if (imageFile) formData.append('image', imageFile);

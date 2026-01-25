@@ -6,6 +6,7 @@ import { Check, ArrowRight, MessageSquare, Loader2, Sparkles } from 'lucide-reac
 import { useParams } from 'react-router-dom';
 import { fetchCookies } from '../services/cookies.ts';
 import axios from 'axios';
+import { useErrorStatus } from '../services/errorStatus.ts';
 
 interface PlansProps {
   onBack: () => void;
@@ -13,6 +14,7 @@ interface PlansProps {
 }
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
+  const { errorStatus } = useErrorStatus();
   const { id } = useParams<{ id: string }>();
   const [plans, setPlans] = useState<ApiPlan[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,6 +44,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
         setPlans(data);
       } catch (err) {
         console.error(err);
+        errorStatus(err);
       } finally {
         setLoading(false);
       }
@@ -64,16 +67,16 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
   return (
     <Layout onBack={onBack}>
       <div className="w-full space-y-16 pb-20">
-        <div className="text-center space-y-4 max-w-2xl mx-auto">
+        <div className="text-center space-y-4 mx-auto">
           <h1 className="text-4xl md:text-6xl font-serif">Select Your Plan</h1>
           <p className="text-stone-500 font-light leading-relaxed">Choose how you want your story to be told.</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mx-auto">
           {Array.isArray(plans) &&
             plans.map((plan) => (
               <div
                 key={plan.id}
-                className={`relative flex flex-col p-10 rounded-[2.5rem] border transition-all duration-500 group ${plan.mostPopular
+                className={`relative flex flex-col p-10 rounded-2xl border transition-all duration-500 group ${plan.mostPopular
                   ? 'border-rose-200 bg-rose-50/20 shadow-2xl shadow-rose-100 ring-2 ring-rose-100 scale-105 z-10'
                   : 'border-stone-100 bg-white hover:border-stone-200 shadow-xl shadow-stone-100'
                   }`}

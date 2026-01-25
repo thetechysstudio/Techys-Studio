@@ -3,6 +3,7 @@ import Layout from '../components/Layout.tsx';
 import { CheckCircle, Home, Calendar, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useErrorStatus } from '../services/errorStatus.ts';
 
 interface ConfirmationData {
   productTitle: string;
@@ -21,9 +22,11 @@ const Confirmation: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<ConfirmationData | null>(null);
   const [loading, setLoading] = useState(true);
+  const { errorStatus } = useErrorStatus();
 
   useEffect(() => {
     const fetchOrderSummary = async () => {
+      const accessToken = localStorage.getItem('accessToken');
       try {
         const token1 = localStorage.getItem('orderConfirmed');
         const token2 = localStorage.getItem('order');
@@ -40,15 +43,12 @@ const Confirmation: React.FC = () => {
           `${BACKEND_URL}/order-confirmation/`,
           {
             headers: {
-              'bypass-tunnel-reminder': 'true',
               'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
             },
+            withCredentials: true,
           }
         );
-
-        if (!response.data) {
-          throw new Error('Unauthorized');
-        }
 
         const result = response.data;
         console.log(result);
@@ -58,8 +58,9 @@ const Confirmation: React.FC = () => {
         sendWhatsApp(data)
 
       } catch (error) {
-        console.error(error);
-        navigate('/');
+        console.error(error?.response?.data || error.message || error);
+        errorStatus(error);
+        // navigate('/');
       }
     };
 
@@ -171,10 +172,10 @@ ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.p
           onClick={() => {
             localStorage.removeItem('orderConfirmed');
             localStorage.removeItem('order');
-            sendWhatsApp(data)
-            navigate('/');
+            // sendWhatsApp(data)
+            navigate('/home');
           }}
-          className="w-full max-w-md py-4 bg-stone-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-xl"
+          className="w-full max-w-md py-3 cursor-pointer bg-stone-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-xl"
         >
           <Home size={18} /> Back to Home
         </button>

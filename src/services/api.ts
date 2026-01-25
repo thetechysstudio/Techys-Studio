@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useErrorStatus } from "./errorStatus";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 
@@ -10,7 +11,7 @@ export interface SizeOption {
     price: number; // Changed from basePrice
     offer: number; // Changed from discountPercent
     minQuantity: number; // Changed from discountThreshold
-}
+}   
 
 export interface TemplateOption {
     id: string;
@@ -20,6 +21,8 @@ export interface TemplateOption {
 }
 
 export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
+    console.log(planId);
+    // const { errorStatus } = useErrorStatus();
     try {
         const response = await axios.get(`${BACKEND_URL}/size/${planId}/`, {
             headers: {
@@ -35,12 +38,14 @@ export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
         const data = response.data;
         return data;
     } catch (error) {
-        console.error('Failed to fetch sizes:', error);
+        console.error('Failed to fetch sizes:', error?.response?.data || error.message || error);
+        // errorStatus(error);
         throw error;
     }
 };
 
 export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> => {
+    // const { errorStatus } = useErrorStatus();
     try {
         const response = await axios.get(`${BACKEND_URL}/template/${sizeId}/`, {
             headers: {
@@ -61,12 +66,14 @@ export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> 
         // If it returns one object, we wrap it. If it returns list, we use it.
         return Array.isArray(data) ? data : [data];
     } catch (error) {
-        console.error('Failed to fetch templates:', error);
+        console.error('Failed to fetch templates:', error?.response?.data || error.message || error);
+        // errorStatus(error);
         throw error;
     }
 };
 
 export const submitPersonalization = async (formData: FormData): Promise<any> => {
+    // const { errorStatus } = useErrorStatus();
     const accessToken = localStorage.getItem("accessToken");
 
     try {
@@ -89,6 +96,7 @@ export const submitPersonalization = async (formData: FormData): Promise<any> =>
             "Failed to submit personalization:",
             error?.response?.data || error.message || error
         );
+        // errorStatus(error);
         throw error;
     }
 };

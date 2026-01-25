@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useErrorStatus } from "../services/errorStatus";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com";
 
 const Login: React.FC = () => {
+  const { errorStatus } = useErrorStatus();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,7 @@ const Login: React.FC = () => {
       navigate("/home");
     } catch (err: any) {
       console.log("LOGIN ERROR:", err?.response?.data || err.message || err);
+      errorStatus(err);
     } finally {
       setLoading(false);
     }

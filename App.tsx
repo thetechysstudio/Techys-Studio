@@ -11,6 +11,7 @@ import Confirmation from './src/pages/Confirmation.tsx';
 import Login from './src/pages/Login.tsx';
 import Signup from './src/pages/Signup.tsx';
 import Orders from './src/pages/Orders.tsx';
+import OrdersDetails from './src/pages/OrdersDetails.tsx';
 import Hero from './src/components/Hero.tsx';
 import Main from './src/pages/Memory Card Polaroids Design/Main.tsx';
 import Scan from './src/pages/Music Card/Scan.tsx';
@@ -86,6 +87,10 @@ const AppContent: React.FC = () => {
 
         <Route path="/orders" element={
           <Orders />
+        } />
+
+        <Route path="/orders/:id" element={
+          <OrdersDetails />
         } />
 
         <Route path='/memory-card-designs' element={

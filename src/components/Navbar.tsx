@@ -12,7 +12,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBack, showCart = true }) => {
   const location = useLocation();
   const [isLogined, setIsLogined] = useState(false) // Change to flase to test login button
 
-  const isHome = location.pathname === '/';
+  const isHome = location.pathname === '/home';
   const isProducts = location.pathname.startsWith('/product');
 
   useEffect(() => {
@@ -149,7 +149,7 @@ const Navbar: React.FC<NavbarProps> = ({ onBack, showCart = true }) => {
               </p>
 
               <Link
-                to="/"
+                to="/home"
                 onClick={() => setIsMenuOpen(false)}
                 className={`text-5xl font-serif text-left block w-full ${
                   isHome ? 'text-stone-900 italic' : 'text-stone-200'

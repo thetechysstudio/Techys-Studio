@@ -5,6 +5,7 @@ import { ApiProduct } from '../../types.ts';
 import { Check, Loader2, ArrowRight, Camera, Video, Sparkles, ShieldCheck } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useErrorStatus } from '../services/errorStatus.ts';
 
 interface ProductDetailProps {
   onBack: () => void;
@@ -12,6 +13,7 @@ interface ProductDetailProps {
 }
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = false }) => {
+  const { errorStatus } = useErrorStatus();
   const navigate = useNavigate();
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
         setProducts(data);
       } catch (err) {
         console.error(err);
+        errorStatus(err);
       } finally {
         setLoading(false);
       }
