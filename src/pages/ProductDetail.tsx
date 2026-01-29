@@ -76,10 +76,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
                   <div className="bg-white p-5 pb-24 shadow-[0_40px_120px_-20px_rgba(0,0,0,0.12)] border border-stone-100 transition-all duration-1000 hover:-rotate-1 hover:scale-[1.01]">
                     <div className="aspect-square bg-stone-50 overflow-hidden relative">
                       <img
-                        src={product.image}
+                        src={`https://api.shop.drmcetit.com/${product.image}`}
                         alt={product.title}
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
-                        onError={(e) => { (e.target as HTMLImageElement).src = `https://picsum.photos/seed/${product.id}/1200/1200`; }}
+                        onError={(e) => { (e.target as HTMLImageElement).src = "./The-Techys-Studio.png"; }}
                       />
                     </div>
                   </div>
