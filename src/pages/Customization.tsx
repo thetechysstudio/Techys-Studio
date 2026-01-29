@@ -5,6 +5,7 @@ import { OrderState, CardSize } from '../../types.ts';
 import { fetchSizes, fetchTemplates, submitPersonalization, SizeOption, TemplateOption } from '../services/api.ts';
 import { Upload, ChevronRight, Check, Tag } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { showToast } from '../components/toast.ts';
 
 interface CustomizationProps {
   order: OrderState;
@@ -37,6 +38,19 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
     }
   }, [navigate]);
 
+useEffect(() => {
+  const isReload = sessionStorage.getItem("isReload");
+
+  if (isReload === "true") {
+    navigate("/plans/1", { replace: true });
+    sessionStorage.removeItem("isReload");
+  } else {
+    sessionStorage.setItem("isReload", "true");
+  }
+}, [navigate]);
+
+
+
   React.useEffect(() => {
     const loadSizes = async () => {
       if (!planId) return;
@@ -62,19 +76,39 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
     setLocalOrder(prev => ({ ...prev, ...updates }));
   };
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, type: 'video' | 'image') => {
+  const handleFileUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    type: 'video' | 'image'
+  ) => {
     const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      if (type === 'video') {
-        handleUpdate({ videoUrl: url });
-        setVideoFile(file);
-      } else {
-        handleUpdate({ imageUrl: url });
-        setImageFile(file);
-      }
+    if (!file) return;
+
+    const MAX_VIDEO_SIZE = 25 * 1024 * 1024; // 25MB
+    const MAX_IMAGE_SIZE = 5 * 1024 * 1024;  // 5MB
+
+    if (type === 'video' && file.size > MAX_VIDEO_SIZE) {
+      showToast("Video size must be less than 25MB", "alert");
+      e.target.value = '';
+      return;
+    }
+
+    if (type === 'image' && file.size > MAX_IMAGE_SIZE) {
+      showToast("Image size must be less than 5MB", "alert");
+      e.target.value = '';
+      return;
+    }
+
+    const url = URL.createObjectURL(file);
+
+    if (type === 'video') {
+      handleUpdate({ videoUrl: url });
+      setVideoFile(file);
+    } else {
+      handleUpdate({ imageUrl: url });
+      setImageFile(file);
     }
   };
+
 
   const isStep1Valid = !!localOrder.size;
   const isStep2Valid = !!localOrder.templateId;
@@ -170,7 +204,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                         onClick={() => handleUpdate({ templateId: t.id })}
                         className={`relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer border-2 transition-all ${localOrder.templateId === t.id
                           ? 'border-stone-900 shadow-xl'
-                          : 'border-transparent opacity-60 hover:opacity-100'
+                          : 'border-transparent  hover:opacity-100'
                           }`}
                       >
                         <img src={BACKEND_URL + t.image} alt={t.title} className="w-full h-full object-cover" />
@@ -192,7 +226,7 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
                         <div className="space-y-2">
                           <label className="text-xs uppercase tracking-widest text-stone-500 font-medium">Video Memory</label>
                           <div className="relative group cursor-pointer border-2 border-dashed border-stone-200 rounded-xl p-4 flex flex-col items-center justify-center bg-stone-50 hover:bg-stone-100 transition-colors">
-                            <input type="file" accept="video/*" onChange={(e) => handleFileUpload(e, 'video')} className="absolute inset-0 opacity-0 cursor-pointer" />
+                            <input type="file" accept="video/mp4" onChange={(e) => handleFileUpload(e, 'video')} className="absolute inset-0 opacity-0 cursor-pointer" />
                             <Upload size={20} className="text-stone-400 mb-2" />
                             <span className="text-[10px] text-stone-500">{localOrder.videoUrl ? 'Uploaded ✓' : 'Upload Video'}</span>
                           </div>

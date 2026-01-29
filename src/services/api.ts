@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useErrorStatus } from "./errorStatus";
+import { showToast } from "../components/toast";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 
@@ -38,7 +39,8 @@ export const fetchSizes = async (planId: string): Promise<SizeOption[]> => {
         const data = response.data;
         return data;
     } catch (error) {
-        console.error('Failed to fetch sizes:', error?.response?.data || error.message || error);
+        // console.error('Failed to fetch sizes:', error?.response?.data || error.message || error);
+        showToast(error?.response?.data?.error || error.message || error, "alert");
         // errorStatus(error);
         throw error;
     }
@@ -66,7 +68,8 @@ export const fetchTemplates = async (sizeId: string): Promise<TemplateOption[]> 
         // If it returns one object, we wrap it. If it returns list, we use it.
         return Array.isArray(data) ? data : [data];
     } catch (error) {
-        console.error('Failed to fetch templates:', error?.response?.data || error.message || error);
+        // console.error('Failed to fetch templates:', error?.response?.data || error.message || error);
+        showToast(error?.response?.data?.error || error.message || error, "alert");
         // errorStatus(error);
         throw error;
     }
@@ -89,13 +92,15 @@ export const submitPersonalization = async (formData: FormData): Promise<any> =>
         );
 
         localStorage.setItem("order", "srdtfyghjkresdtfghjdfgh");
+        showToast("Personalization submitted successfully", "success");
         return response.data;
 
     } catch (error: any) {
-        console.error(
-            "Failed to submit personalization:",
-            error?.response?.data || error.message || error
-        );
+        // console.error(
+        //     "Failed to submit personalization:",
+        //     error?.response?.data || error.message || error
+        // );
+        showToast(error?.response?.data?.error || error.message || error, "alert");
         // errorStatus(error);
         throw error;
     }

@@ -19,7 +19,7 @@ export const useErrorStatus = () => {
         "Something went wrong";
 
       // ✅ Debug once (remove later)
-      console.log("ERROR STATUS:", status, error);
+      // console.log("ERROR STATUS:", status, error);
 
       if (status === 401) {
         localStorage.clear();
@@ -34,9 +34,9 @@ export const useErrorStatus = () => {
       }
 
       const alertStatuses = [400, 403, 404, 409, 422, 429, 500, 502, 503, 504];
-      if (alertStatuses.includes(status)) {
-        alert(message);
-      }
+      // if (alertStatuses.includes(status)) {
+      //   alert(message);
+      // }
     },
     [navigate]
   );

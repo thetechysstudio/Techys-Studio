@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useErrorStatus } from "../services/errorStatus";
+import { showToast } from "../components/toast";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com";
 
@@ -24,9 +25,11 @@ const Login: React.FC = () => {
       });
       localStorage.setItem("accessToken", res.data.access);
       localStorage.setItem("refreshToken", res.data.refresh);
+      showToast("Login successful", "success");
       navigate("/home");
     } catch (err: any) {
-      console.log("LOGIN ERROR:", err?.response?.data || err.message || err);
+      // console.log("LOGIN ERROR:", err?.response?.data || err.message || err);
+      showToast(err?.response?.data?.error || err.message || err, "alert");
       errorStatus(err);
     } finally {
       setLoading(false);

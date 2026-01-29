@@ -4,6 +4,7 @@ import { CheckCircle, Home, Calendar, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
+import { showToast } from '../components/toast.ts';
 
 interface ConfirmationData {
   productTitle: string;
@@ -51,14 +52,16 @@ const Confirmation: React.FC = () => {
         );
 
         const result = response.data;
-        console.log(result);
+        showToast("Order confirmed successfully", "success");
+        // console.log(result);
         setData(result);
         setLoading(false);
         const data = result;
         sendWhatsApp(data)
 
       } catch (error) {
-        console.error(error?.response?.data || error.message || error);
+        // console.error(error?.response?.data || error.message || error);
+        showToast(error?.response?.data?.error || error.message || error, "alert");
         errorStatus(error);
         // navigate('/');
       }

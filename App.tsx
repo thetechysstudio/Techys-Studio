@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { HashRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import { OrderState, CustomerDetails, ApiPlan } from './types.ts';
@@ -15,6 +14,8 @@ import OrdersDetails from './src/pages/OrdersDetails.tsx';
 import Hero from './src/components/Hero.tsx';
 import Main from './src/pages/Memory Card Polaroids Design/Main.tsx';
 import Scan from './src/pages/Music Card/Scan.tsx';
+import { ToastContainer } from 'react-toastify';
+
 
 const AppContent: React.FC = () => {
   const navigate = useNavigate();
@@ -63,6 +64,8 @@ const AppContent: React.FC = () => {
 
   return (
     <div className="antialiased">
+      {/* your routes / layout */}
+      <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
         <Route path="/" element={
           <Hero />

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { showToast } from "../components/toast";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com/api";
 
@@ -45,8 +46,10 @@ const Signup: React.FC = () => {
 
             // ✅ redirect after success
             navigate("/login");
+            showToast("Signup successful, now you can Login", "success");
         } catch (err: any) {
-            setErrorMsg(getErrorMessage(err)); // ✅ always a string now
+            // setErrorMsg(getErrorMessage(err)); // ✅ always a string now
+            showToast(err?.response?.data?.error || err.message || err || err.data.error, "alert");
         }
         finally {
             setLoading(false);

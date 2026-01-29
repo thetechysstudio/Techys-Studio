@@ -6,6 +6,7 @@ import { CreditCard, Truck, ShieldCheck, Tag } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
+import { showToast } from '../components/toast.ts';
 
 interface CheckoutProps {
   order: OrderState;
@@ -65,13 +66,15 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
       }
       localStorage.setItem('orderConfirmed', "srdtffdfdgdgfyghjkresdtfghjdfgh");
 
-      console.log('Delivery details submitted successfully');
+      // console.log('Delivery details submitted successfully');
+      showToast("Delivery details submitted successfully", "success");
       onConfirm(formData);
     } catch (err) {
-      console.error('Submission failed', err?.response?.data || err.message || err || err.data.error);
+      // console.error('Submission failed', err?.response?.data || err.message || err || err.data.error);
       errorStatus(err);
+      showToast(err?.response?.data?.error || err.message || err || err.data.error, "alert");
       // Optional: Show error to user
-      alert('Failed to submit delivery details. Please try again.');
+      // alert('Failed to submit delivery details. Please try again.');
     } finally {
       setSubmitting(false);
     }
