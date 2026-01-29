@@ -44,14 +44,14 @@ const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
           <div className="relative bg-white p-4 pb-12 polaroid-shadow transition-transform group-hover:scale-[1.02] duration-500">
             <div className="aspect-square bg-stone-100 overflow-hidden">
               <img
-                src="https://picsum.photos/seed/techys/800/800"
+                src="src/assets/The-Techys-Studio.jpeg"
                 alt="Memory Card Preview"
                 className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700"
               />
             </div>
             <div className="mt-5 text-left px-2">
-              <h3 className="font-serif text-3xl text-stone-800">Polaroids</h3>
-              <p className="text-stone-400 text-sm mt-1">Starting from 49 rs</p>
+              <h3 className="font-serif text-3xl text-stone-800">Memory Card</h3>
+              <p className="text-stone-400 text-sm mt-1">Just Make Your Memories Saved.....</p>
             </div>
             <div className="absolute bottom-5 right-5 w-8 h-8 opacity-20 group-hover:opacity-40 transition-opacity">
               <div className="w-full h-full border border-stone-800 flex items-center justify-center p-1.5">

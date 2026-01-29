@@ -3,20 +3,11 @@ import { PhotoData } from "./types";
 const API_URL = "https://api.shop.drmcetit.com/api/cards/";
 const BACKEND_URL = "https://api.shop.drmcetit.com";
 
-/**
- * If you're running locally and want to avoid CORS for /media,
- * add a Vite proxy:
- *  server: { proxy: { "/media": { target: "https://api.shop.drmcetit.com", changeOrigin: true, secure: true } } }
- *
- * Then keep USE_MEDIA_PROXY_IN_DEV = true while on localhost.
- */
-const USE_MEDIA_PROXY_IN_DEV = true;
-
 type CardApiItem = {
   id: number;
-  image: string | null;     // "/media/..." or full url
+  image: string | null;
   title: string | null;
-  subtile: string | null;   // backend key is "subtile"
+  subtile: string | null;
   description: string | null;
   tagline: string | null;
   size: string | null;
@@ -27,41 +18,35 @@ const isLocalhost = () =>
   (window.location.hostname === "localhost" ||
     window.location.hostname === "127.0.0.1");
 
+const USE_MEDIA_PROXY_IN_DEV = isLocalhost();
+
 const normalizeImageUrl = (image: string | null) => {
   if (!image) return "https://picsum.photos/800/1000";
 
-  // Already absolute
+  // absolute url
   if (image.startsWith("http://") || image.startsWith("https://")) {
-    // If it's the same backend and we're on localhost, rewrite to /media/... to use Vite proxy
-    if (
-      USE_MEDIA_PROXY_IN_DEV &&
-      isLocalhost() &&
-      image.startsWith(`${BACKEND_URL}/media/`)
-    ) {
-      return image.replace(BACKEND_URL, ""); // => "/media/..."
+    // if localhost + same backend media, convert to "/media/..." (needs Vite proxy)
+    if (USE_MEDIA_PROXY_IN_DEV && image.startsWith(`${BACKEND_URL}/media/`)) {
+      return image.replace(BACKEND_URL, "");
     }
     return image;
   }
 
-  // Relative from backend, typically "/media/..."
+  // "/media/..."
   if (image.startsWith("/media/")) {
-    // On localhost, prefer proxy to avoid CORS
-    if (USE_MEDIA_PROXY_IN_DEV && isLocalhost()) return image; // "/media/..."
-    // In production build, use full backend URL
-    return `${BACKEND_URL}${image}`;
+    if (USE_MEDIA_PROXY_IN_DEV) return image; // localhost via proxy
+    return `${BACKEND_URL}${image}`;          // production direct
   }
 
-  // Any other relative path
-  if (USE_MEDIA_PROXY_IN_DEV && isLocalhost()) return `/${image.replace(/^\/+/, "")}`;
-  return `${BACKEND_URL}/${image.replace(/^\/+/, "")}`;
+  // other relative
+  const cleaned = image.replace(/^\/+/, "");
+  if (USE_MEDIA_PROXY_IN_DEV) return `/${cleaned}`;
+  return `${BACKEND_URL}/${cleaned}`;
 };
 
 export const fetchPhotos = async (): Promise<PhotoData[]> => {
   const res = await fetch(API_URL);
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch cards: ${res.status} ${res.statusText}`);
-  }
+  if (!res.ok) throw new Error(`Failed to fetch cards: ${res.status} ${res.statusText}`);
 
   const data: CardApiItem[] = await res.json();
 
@@ -69,7 +54,7 @@ export const fetchPhotos = async (): Promise<PhotoData[]> => {
     id: item.id,
     url: normalizeImageUrl(item.image),
     title: item.title ?? "",
-    subtitle: item.subtile ?? "",       // API "subtile" -> UI "subtitle"
+    subtitle: item.subtile ?? "",
     description: item.description ?? "",
     tagline: item.tagline ?? "",
     size: item.size ?? "",

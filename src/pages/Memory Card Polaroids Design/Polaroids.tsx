@@ -202,7 +202,11 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             position={[0, -1.2, 0.02]}
             fontSize={0.2}
             color="#222"
-            anchorX="left"
+            maxWidth={2.6}
+            textAlign="center"
+            anchorX="center"
+            anchorY="middle"
+            overflowWrap="break-word"
             font="/fonts/DancingScript-Regular.ttf"
           >
             {data.title}
@@ -213,7 +217,11 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             position={[0, -1.5, 0.02]}
             fontSize={0.12}
             color="#555"
-            anchorX="left"
+            maxWidth={2.6}
+            textAlign="center"
+            anchorX="center"
+            anchorY="middle"
+            overflowWrap="break-word"
             font="/fonts/Poppins-Regular.ttf"
           >
             {data.subtitle}
@@ -224,11 +232,16 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             position={[0, -1.7, 0.02]}
             fontSize={0.09}
             color="#777"
-            anchorX="left"
+            maxWidth={2.6}
+            textAlign="center"
+            anchorX="center"
+            anchorY="middle"
+            overflowWrap="break-word"
             font="/fonts/Poppins-Regular.ttf"
           >
             {data.tagline}
           </Text>
+
 
         </group>
 
@@ -238,15 +251,53 @@ const Polaroid: React.FC<PolaroidProps> = ({ data, index, spacing }) => {
             <planeGeometry args={[3.4, 4.2]} />
             <meshStandardMaterial color="#f9f9f9" roughness={0.6} />
           </mesh>
-          <Text position={[0, 1.4, 0.01]} fontSize={0.25} color="#111" maxWidth={3}>
+          <Text
+            position={[0, 1.4, 0.01]}
+            fontSize={0.25}
+            color="#111"
+            maxWidth={3}
+            textAlign="center"
+            anchorX="center"
+            overflowWrap="break-word"
+          >
             {data.title}
           </Text>
-          <Text position={[0, 0.8, 0.01]} fontSize={0.12} color="#666" letterSpacing={0.1}>
-            {data.tagline} • {data.size}
+
+          <Text
+            position={[0, 0.8, 0.01]}
+            fontSize={0.12}
+            color="#666"
+            maxWidth={3}
+            textAlign="center"
+            anchorX="center"
+          >
+            {data.size}
           </Text>
-          <Text position={[0, -0.3, 0.01]} fontSize={0.14} color="#333" maxWidth={2.8} textAlign="center" lineHeight={1.5}>
+
+          <Text
+            position={[0, 0.6, 0.01]}
+            fontSize={0.12}
+            color="#666"
+            maxWidth={3}
+            textAlign="center"
+            anchorX="center"
+          >
+            {data.tagline}
+          </Text>
+
+          <Text
+            position={[0, -0.3, 0.01]}
+            fontSize={0.14}
+            color="#333"
+            maxWidth={2.8}
+            textAlign="center"
+            anchorX="center"
+            lineHeight={1.5}
+            overflowWrap="break-word"
+          >
             {data.description}
           </Text>
+
           <Text position={[0, -1.7, 0.01]} fontSize={0.09} color="#aaa" letterSpacing={0.3}>
             ARCHIVE NO. 00{data.id}
           </Text>

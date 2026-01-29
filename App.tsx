@@ -29,9 +29,24 @@ const AppContent: React.FC = () => {
 
   const handlePlanSelect = (plan: ApiPlan) => {
     if (plan.custom) {
-      alert(`Our team will reach out for the "${plan.title}" consultation.`);
+      const message = `Hi, I need to know about the "${plan.title}" plan`;
+      const instaUsername = "the_techys_studio"; // 👈 replace this
+
+      const instaDMUrl = `https://ig.me/m/${instaUsername}?text=${encodeURIComponent(message)}`;
+
+      window.open(instaDMUrl, "_blank"); // opens Instagram DM in new tab
       return;
     }
+    if (plan.custom) {
+      const message = `Hi, I need to know about the "${plan.title}" plan`;
+      const instaUsername = "your_instagram_username"; // 👈 replace this
+
+      const instaDMUrl = `https://ig.me/m/${instaUsername}?text=${encodeURIComponent(message)}`;
+
+      window.open(instaDMUrl, "_blank"); // opens Instagram DM in new tab
+      return;
+    }
+
     setOrder(prev => ({ ...prev, plan }));
     navigate(`/customization/${plan.id}`);
   };
@@ -82,7 +97,7 @@ const AppContent: React.FC = () => {
           <Checkout order={order} onBack={() => navigate('/customization')} onConfirm={handleCompleteCheckout} />
         } />
         <Route path="/confirmation" element={
-          <Confirmation  />
+          <Confirmation />
         } />
 
         <Route path="/orders" element={
@@ -94,10 +109,10 @@ const AppContent: React.FC = () => {
         } />
 
         <Route path='/memory-card-designs' element={
-          <Main/>
+          <Main />
         } />
         <Route path='/music-card-scan' element={
-          <Scan/>
+          <Scan />
         } />
 
       </Routes>

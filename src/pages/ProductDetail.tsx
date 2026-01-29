@@ -103,8 +103,8 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
                   </div>
 
                   {/* Description */}
-                  <div className="space-y-6 max-w-xl">
-                    <p className="text-stone-500 font-light leading-relaxed text-[17px]">
+                  <div className="space-y-2 max-w-xl">
+                    <p className="text-stone-500 font-light leading-relaxed text-[14px]">
                       {product.description}
                     </p>
 
@@ -120,7 +120,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
                       Why you'll love it
                     </p>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-12">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-12">
                       {(product.features?.length
                         ? product.features
                         : [
@@ -134,10 +134,10 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
                       ).map((feature, i) => (
                         <div key={i} className="flex items-center gap-3">
                           <span className="w-6 h-6 rounded-full bg-stone-100 flex items-center justify-center flex-shrink-0">
-                            <Check size={14} className="text-stone-600" strokeWidth={3} />
+                            <Check size={12} className="text-stone-600" strokeWidth={3} />
                           </span>
 
-                          <span className="text-[15px] text-stone-700 font-medium">
+                          <span className="text-[12px] text-stone-700 font-medium">
                             {feature}
                           </span>
                         </div>
@@ -151,7 +151,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
                       onClick={() => {
                         navigate(`/plans/${product.id}`);
                       }}
-                      className="w-full py-5 cursor-pointer rounded-2xl bg-stone-900 text-white font-semibold text-base md:text-lg shadow-lg hover:bg-stone-800 active:scale-[0.99] transition-all"
+                      className="w-full py-3 cursor-pointer rounded-2xl bg-stone-900 text-white font-semibold text-base md:text-lg shadow-lg hover:bg-stone-800 active:scale-[0.99] transition-all"
                     >
                       Choose Your Plan
                     </button>

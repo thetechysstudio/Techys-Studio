@@ -68,7 +68,29 @@ const Confirmation: React.FC = () => {
   }, [navigate]);
 
   const sendWhatsApp = (data: any) => {
-    const phone = 9345857852;
+    //     const phone = 9345857852;
+
+    //     const message = `
+    // Order Confirmed ✅
+
+    // Product: ${data.productTitle}
+    // Plan: ${data.planTitle}
+    // Size: ${data.size}
+    // Quantity: ${data.quantity}
+    // Total Amount: ${data.totalAmount}
+
+
+    // Shipping Address:
+    // ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.pincode}
+
+    // – The Techys Studio
+    //   `.trim();
+
+    //     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    //     window.open(url, "_blank");
+
+    const instaUsername = "the_techys_studio"; // without @
 
     const message = `
 Order Confirmed ✅
@@ -79,16 +101,16 @@ Size: ${data.size}
 Quantity: ${data.quantity}
 Total Amount: ${data.totalAmount}
 
-
 Shipping Address:
 ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.pincode}
 
 – The Techys Studio
-  `.trim();
+`.trim();
 
-    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    const url = `https://ig.me/m/${instaUsername}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
+
   };
 
   // useEffect(() => {
@@ -172,7 +194,7 @@ ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.p
           onClick={() => {
             localStorage.removeItem('orderConfirmed');
             localStorage.removeItem('order');
-            // sendWhatsApp(data)
+            sendWhatsApp(data)
             navigate('/home');
           }}
           className="w-full max-w-md py-3 cursor-pointer bg-stone-900 text-white rounded-xl font-medium flex items-center justify-center gap-2 shadow-xl"

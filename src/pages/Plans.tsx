@@ -108,7 +108,7 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
                 </div>
                 <button
                   onClick={() => onSelectPlan(plan)}
-                  className={`w-full py-4 cursor-pointer rounded-2xl font-medium flex items-center justify-center gap-3 transition-all active:scale-95 ${plan.custom
+                  className={`w-full py-3 cursor-pointer rounded-xl font-medium flex items-center justify-center gap-3 transition-all active:scale-95 ${plan.custom
                     ? 'bg-stone-100 text-stone-800 hover:bg-stone-200'
                     : plan.mostPopular
                       ? 'bg-rose-500 text-white hover:bg-rose-600 shadow-xl '
