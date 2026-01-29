@@ -2,11 +2,14 @@
 import React from 'react';
 import Layout from '../components/Layout.tsx';
 import { ArrowRight } from 'lucide-react';
+import logo from '../assets/The-Techys-Studio.jpeg';
 
 interface HomeProps {
   onShopNow: () => void;
   onSeePlans: () => void;
 }
+
+const imgLogo = logo;
 
 const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
   return (
@@ -44,7 +47,7 @@ const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
           <div className="relative bg-white p-4 pb-12 polaroid-shadow transition-transform group-hover:scale-[1.02] duration-500">
             <div className="aspect-square bg-stone-100 overflow-hidden">
               <img
-                src="src/assets/The-Techys-Studio.jpeg"
+                src={imgLogo}
                 alt="Memory Card Preview"
                 className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-700"
               />

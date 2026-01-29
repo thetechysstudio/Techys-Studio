@@ -1,4 +1,22 @@
 import { Plan, CardSize, CardTemplate, Memory } from './types.ts';
+import bestFriends from './src/assets/best-friends.png';
+import farewell from './src/assets/farewell.png';
+import birthday from './src/assets/birthday.png';
+import teachers from './src/assets/teachers.png';
+import motherFatherDay from './src/assets/mother-father-day.png';
+import specialMemories from './src/assets/specialmemories.png';
+import anniversary from './src/assets/aniversary.png';
+import rakshaBandhan from './src/assets/RakshaBandhan.png';
+
+export const imgBestFriend = bestFriends;
+export const imgFarewell = farewell;
+export const imgBirthday = birthday;
+export const imgTeachers = teachers;
+export const imgMotherFatherDay = motherFatherDay;
+export const imgSpecialMemories = specialMemories;
+export const imgAnniversary = anniversary;
+export const imgRakshaBandhan = rakshaBandhan;
+
 
 export const SIZES: {   
   label: CardSize; 
@@ -91,7 +109,7 @@ export const MEMORIES: Memory[] = [
     id: '1',
     title: 'Best Friends',
     caption: 'The bond of love and respect.',
-    imageUrl: 'src/assets/best-friends.png',
+    imageUrl: imgBestFriend,
     x: 15,
     y: 20,
     rotation: -8,
@@ -100,7 +118,7 @@ export const MEMORIES: Memory[] = [
     id: '2',
     title: 'Farewell',
     caption: 'The bond of love and respect.',
-    imageUrl: 'src/assets/farewell.png',
+    imageUrl: imgFarewell,
     x: 75,
     y: 15,
     rotation: 6,
@@ -109,7 +127,7 @@ export const MEMORIES: Memory[] = [
     id: '3',
     title: 'Birthday',
     caption: 'The bond of love and respect.',
-    imageUrl: 'src/assets/birthday.png',
+    imageUrl: imgBirthday,
     x: 45,
     y: 10,
     rotation: -4,
@@ -118,7 +136,7 @@ export const MEMORIES: Memory[] = [
     id: '4',
     title: 'Teachers',
     caption: 'The bond of love and respect.',
-    imageUrl: 'src/assets/teachers.png',
+    imageUrl: imgTeachers,
     x: 25,
     y: 60,
     rotation: 9,
@@ -127,7 +145,7 @@ export const MEMORIES: Memory[] = [
     id: '5',
     title: 'Mother Father Day',
     caption: 'The bond of love and respect.',
-    imageUrl: 'src/assets/mother-father-day.png',
+    imageUrl: imgMotherFatherDay,
     x: 65,
     y: 55,
     rotation: -7,
@@ -136,7 +154,7 @@ export const MEMORIES: Memory[] = [
     id: '6',
     title: 'Special Memories',
     caption: 'The bond of love and togetherness.',
-    imageUrl: 'src/assets/specialmemories.png',
+    imageUrl: imgSpecialMemories,
     x: 85,
     y: 70,
     rotation: 5,
@@ -145,7 +163,7 @@ export const MEMORIES: Memory[] = [
     id: '7',
     title: 'Anniversary',
     caption: 'The bond of love and togetherness.',
-    imageUrl: 'src/assets/aniversary.png',
+    imageUrl: imgAnniversary,
     x: 5,
     y: 80,
     rotation: -10,
@@ -154,7 +172,7 @@ export const MEMORIES: Memory[] = [
     id: '8',
     title: 'Raksha Bandhan',
     caption: 'The bond of love and protection.',
-    imageUrl: 'src/assets/RakshaBandhan.png',
+    imageUrl: imgRakshaBandhan,
     x: 40,
     y: 85,
     rotation: 3,
