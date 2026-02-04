@@ -3,11 +3,24 @@ import { motion } from 'framer-motion';
 import { MEMORIES } from '../../constants';
 import { Polaroid } from './Polaroid';
 import { MousePosition } from '../../types';
-import { Link } from 'react-router-dom';    
+import { Link } from 'react-router-dom';
 
 const Hero: React.FC = () => {
     const [mousePosition, setMousePosition] = useState<MousePosition>({ x: 0, y: 0 });
     const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        const selectedTemplate = localStorage.getItem('selectedTemplate');
+        const orderConfirmed = localStorage.getItem('orderConfirmed');
+        const order = localStorage.getItem('order');
+        const isReload = sessionStorage.getItem('isReload');
+        if (selectedTemplate || orderConfirmed || order || isReload) {
+            localStorage.removeItem('selectedTemplate');
+            localStorage.removeItem('orderConfirmed');
+            localStorage.removeItem('order');
+            sessionStorage.removeItem('isReload');
+        }
+    }, []);
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!containerRef.current) return;
@@ -38,13 +51,13 @@ const Hero: React.FC = () => {
                         The Techys Studio
                     </span>
                     <h1 className="text-5xl md:text-6xl font-bold text-gray-900 tracking-tight leading-[1.1] mb-6">
-                        Making the <span className="font-light italic text-stone-400 normal-case ml-1">memories</span> memorable and everlasting.
+                        Turning Emotions Into <span className="font-light italic text-stone-400 normal-case ml-1">Smart Digital</span> Gifts
                     </h1>
                     <p className="text-lg text-gray-500 font-light max-w-lg mx-auto leading-relaxed mb-6">
-                        We are a collective of dreamers and makers preserving the fragments of time that matter most to you.
+                        At Techys Studio, we build tech-powered memories people love—crafted to feel personal, modern, and timeless.
                     </p>
                     <Link to="/home" className="transform hover:scale-105 px-8 py-3 bg-gray-900 text-white rounded-full font-medium shadow-2xl hover:bg-white hover:text-black transition-colors duration-300">
-                        Start Your Story
+                        Create Your Gift
                     </Link>
                 </motion.div>
             </div>

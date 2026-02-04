@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useErrorStatus } from "../services/errorStatus";
+import { useScrollToTopOnReload } from "../components/reload";
 
 type OrderItem = {
     id: string;
@@ -24,12 +25,29 @@ const Orders: React.FC = () => {
     const [query, setQuery] = useState("");
     const [filter, setFilter] = useState<"all" | "completed" | "payment-pending">("all");
 
+    // Scroll to top on reload
+    useScrollToTopOnReload()
+
+    useEffect(() => {
+        const selectedTemplate = localStorage.getItem('selectedTemplate');
+        const orderConfirmed = localStorage.getItem('orderConfirmed');
+        const order = localStorage.getItem('order');
+        const isReload = sessionStorage.getItem('isReload');
+        if (selectedTemplate || orderConfirmed || order || isReload) {
+            localStorage.removeItem('selectedTemplate');
+            localStorage.removeItem('orderConfirmed');
+            localStorage.removeItem('order');
+            sessionStorage.removeItem('isReload');
+        }
+    }, []);
+
     const checkAuth = () => {
         const token = localStorage.getItem("accessToken");
         if (!token) {
             navigate("/login");
         }
     }
+
 
     const fetchOrders = async () => {
         setLoading(true); // Start loading

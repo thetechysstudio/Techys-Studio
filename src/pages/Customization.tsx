@@ -6,6 +6,7 @@ import { fetchSizes, fetchTemplates, submitPersonalization, SizeOption, Template
 import { Upload, ChevronRight, Check, Tag } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { showToast } from '../components/toast.ts';
+import { useScrollToTopOnReload, useScrollToTopOnReloadOnCLick } from '../components/reload.ts';
 
 interface CustomizationProps {
   order: OrderState;
@@ -30,6 +31,9 @@ const Customization: React.FC<CustomizationProps> = ({ order, onBack, onNext }) 
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Scroll to top on reload
+  useScrollToTopOnReload();
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -267,11 +271,13 @@ useEffect(() => {
                       !isStep3Valid)
                 }
                 onClick={async () => {
+                  useScrollToTopOnReloadOnCLick()
                   if (isSubmitting) return; // safety guard
                   setIsSubmitting(true); // start loading
 
                   try {
                     if (step < 3) {
+                      
                       if (step === 1) {
                         const selectedSize = sizes.find(s => s.label === localOrder.size);
                         if (selectedSize) {

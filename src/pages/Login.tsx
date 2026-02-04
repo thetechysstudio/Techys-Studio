@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useErrorStatus } from "../services/errorStatus";
@@ -12,6 +12,19 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const selectedTemplate = localStorage.getItem('selectedTemplate');
+    const orderConfirmed = localStorage.getItem('orderConfirmed');
+    const order = localStorage.getItem('order');
+    const isReload = sessionStorage.getItem('isReload');
+    if (selectedTemplate || orderConfirmed || order || isReload) {
+      localStorage.removeItem('selectedTemplate');
+      localStorage.removeItem('orderConfirmed');
+      localStorage.removeItem('order');
+      sessionStorage.removeItem('isReload');
+    }
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

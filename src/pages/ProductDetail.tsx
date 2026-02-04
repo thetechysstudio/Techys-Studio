@@ -6,6 +6,7 @@ import { Check, Loader2, ArrowRight, Camera, Video, Sparkles, ShieldCheck } from
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
+import { useScrollToTopOnReload } from '../components/reload.ts';
 
 interface ProductDetailProps {
   onBack: () => void;
@@ -17,6 +18,22 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ onBack, singleMode = fals
   const navigate = useNavigate();
   const [products, setProducts] = useState<ApiProduct[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Scroll to top on reload
+  useScrollToTopOnReload()
+
+  useEffect(() => {
+    const selectedTemplate = localStorage.getItem('selectedTemplate');
+    const orderConfirmed = localStorage.getItem('orderConfirmed');
+    const order = localStorage.getItem('order');
+    const isReload = sessionStorage.getItem('isReload');
+    if (selectedTemplate || orderConfirmed || order || isReload) {
+      localStorage.removeItem('selectedTemplate');
+      localStorage.removeItem('orderConfirmed');
+      localStorage.removeItem('order');
+      sessionStorage.removeItem('isReload');
+    }
+  }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {

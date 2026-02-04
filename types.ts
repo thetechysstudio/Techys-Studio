@@ -62,6 +62,7 @@ export interface CustomerDetails {
   city: string;
   pincode: string;
   state: string;
+  phone: string;
 }
 
 export interface LoginResponse {

@@ -61,6 +61,7 @@ const AppContent: React.FC = () => {
     setCustomer(details);
     navigate('/confirmation');
   };
+  
 
   return (
     <div className="antialiased">

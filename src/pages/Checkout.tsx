@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
 import { showToast } from '../components/toast.ts';
+import { useScrollToTopOnReload } from '../components/reload.ts';
 
 interface CheckoutProps {
   order: OrderState;
@@ -22,8 +23,16 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
     district: '',
     city: '',
     pincode: '',
-    state: ''
+    state: '',
+    phone: ''
   });
+
+  // Scroll to top on reload
+  useScrollToTopOnReload();
+
+  useEffect(() => {
+    sessionStorage.removeItem('isReload')
+  }, []);
 
   useEffect(() => {
     const storedOrder = localStorage.getItem('order');
@@ -51,6 +60,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
     submissionData.append('city', formData.city);
     submissionData.append('pincode', formData.pincode);
     submissionData.append('state', formData.state);
+    submissionData.append('phone', formData.phone);
 
     try {
       const response = await axios.post(`${BACKEND_URL}/delivery-details/`, submissionData, {
@@ -134,16 +144,17 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
         <div className="space-y-8">
           <h2 className="text-3xl font-serif">Delivery Address</h2>
           <form onSubmit={handleSubmit} className="space-y-4">
-            <textarea name="doorNoAndStreet" value={formData.doorNoAndStreet} onChange={handleChange} required rows={2} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none resize-none" placeholder="Door No and Street" />
+            <textarea name="doorNoAndStreet" value={formData.doorNoAndStreet} onChange={handleChange} required rows={2} className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none resize-none" placeholder="Door No and Street" />
+            <input type="number" name="phone" value={formData.phone} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none" placeholder="Phone Number" />
             <div className="grid grid-cols-2 gap-4">
-              <input name="district" value={formData.district} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="District" />
-              <input name="city" value={formData.city} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="City" />
+              <input name="district" value={formData.district} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none" placeholder="District" />
+              <input name="city" value={formData.city} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none" placeholder="City" />
             </div>
             <div className="grid grid-cols-2 gap-4">
-              <input name="pincode" value={formData.pincode} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="Pincode" />
-              <input name="state" value={formData.state} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl outline-none" placeholder="State" />
+              <input name="pincode" value={formData.pincode} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none" placeholder="Pincode" />
+              <input name="state" value={formData.state} onChange={handleChange} required className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-md outline-none" placeholder="State" />
             </div>
-            <button type="submit" disabled={!isFormValid || submitting} className="w-full cursor-pointer py-4 bg-stone-900 text-white rounded-xl font-medium shadow-xl disabled:opacity-50 flex items-center justify-center gap-2">
+            <button type="submit" disabled={!isFormValid || submitting} className="w-full cursor-pointer py-4 bg-stone-900 text-white rounded-md font-medium shadow-md disabled:opacity-50 flex items-center justify-center gap-2">
               <CreditCard size={20} /> {submitting ? 'Processing...' : "Confirm"}
               {/* <CreditCard size={20} /> {submitting ? 'Processing...' : `Pay ${Math.round(finalTotal)} rs`} */}
             </button>
@@ -153,7 +164,7 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
           </div>
         </div>
 
-        <div className="bg-stone-50 rounded-3xl p-8 space-y-8 border border-stone-100">
+        <div className="bg-stone-50 rounded-xl p-8 space-y-8 border border-stone-100">
           <h3 className="text-xl font-serif">Order Summary</h3>
           {loading ? (
             <div className="space-y-8 animate-pulse">
@@ -188,8 +199,8 @@ const Checkout: React.FC<CheckoutProps> = ({ order, onBack, onConfirm }) => {
                 <div className="flex justify-between text-sm"><span>Subtotal</span><span>{subtotal} rs</span></div>
                 {hasDiscount && (
                   <div className="flex justify-between text-sm text-rose-500 font-bold">
-                    <div className="flex items-center gap-1"><Tag size={12} /> <span>Discount ({discountPercent}%)</span></div>
-                    <span>-{Math.round(discountAmount)} rs</span>
+                    <div className="flex items-center gap-1"><Tag size={12} /> <span>Discount</span></div>
+                    <span>{discountPercent}%</span>
                   </div>
                 )}
                 {deliveryCharge > 0 && (

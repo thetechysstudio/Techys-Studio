@@ -7,6 +7,7 @@ import { useParams } from 'react-router-dom';
 import { fetchCookies } from '../services/cookies.ts';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
+import { useScrollToTopOnReload } from '../components/reload.ts';
 
 interface PlansProps {
   onBack: () => void;
@@ -19,9 +20,12 @@ const Plans: React.FC<PlansProps> = ({ onBack, onSelectPlan }) => {
   const [plans, setPlans] = useState<ApiPlan[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchCookies();
-  }, []);
+  // Scroll to top on reload
+  useScrollToTopOnReload();
+
+  // useEffect(() => {
+  //   fetchCookies();
+  // }, []);
 
   useEffect(() => {
     console.log('Plan ID:', id);

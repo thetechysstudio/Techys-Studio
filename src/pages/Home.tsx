@@ -1,21 +1,34 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Layout from '../components/Layout.tsx';
 import { ArrowRight } from 'lucide-react';
 import logo from '../assets/The-Techys-Studio.jpeg';
 
 interface HomeProps {
   onShopNow: () => void;
-  onSeePlans: () => void;
 }
 
 const imgLogo = logo;
 
-const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
+const Home: React.FC<HomeProps> = ({ onShopNow }) => {
+
+  useEffect(() => {
+    const selectedTemplate = localStorage.getItem('selectedTemplate');
+    const orderConfirmed = localStorage.getItem('orderConfirmed');
+    const order = localStorage.getItem('order');
+    const isReload = sessionStorage.getItem('isReload');
+    if (selectedTemplate || orderConfirmed || order || isReload) {
+      localStorage.removeItem('selectedTemplate');
+      localStorage.removeItem('orderConfirmed');
+      localStorage.removeItem('order');
+      sessionStorage.removeItem('isReload');
+    }
+  }, []);
+
   return (
     <Layout>
       <div className="flex flex-col items-center text-center pt-16 pb-16 space-y-12 max-w-5xl mx-auto">
-        <div className="max-w-4xl space-y-8">
+        <div className="max-w-4xl space-y-6">
           <h1 className="text-5xl md:text-6xl lg:text-6xl font-bold tracking-tight text-stone-900 leading-[1.1]">
             The New Way to <br />
             <span className="italic font-serif font-normal text-stone-400">Save Your Memories</span>
@@ -24,6 +37,8 @@ const Home: React.FC<HomeProps> = ({ onShopNow, onSeePlans }) => {
           <p className="max-w-2xl mx-auto text-stone-500 font-light leading-relaxed text-lg md:text-xl">
             Experience the "Memory Card" — a physical Polaroid that bridges the gap between your digital world and physical keepsakes.
           </p>
+
+          <p className='text-stone-400 text-sm mt-1'>Scan | Open | Place | Video </p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto px-4">

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useErrorStatus } from '../services/errorStatus.ts';
 import { showToast } from '../components/toast.ts';
+import { useScrollToTopOnReload } from '../components/reload.ts';
 
 interface ConfirmationData {
   productTitle: string;
@@ -17,13 +18,22 @@ interface ConfirmationData {
   district: string;
   state: string;
   pincode: string;
+  phone: string;
 }
+
 const BACKEND_URL = "https://api.shop.drmcetit.com/api"
 const Confirmation: React.FC = () => {
   const navigate = useNavigate();
   const [data, setData] = useState<ConfirmationData | null>(null);
   const [loading, setLoading] = useState(true);
   const { errorStatus } = useErrorStatus();
+
+  useEffect(() => {
+    localStorage.removeItem('selectedTemplate');
+  }, []);
+
+  // Scroll to top on reload
+  useScrollToTopOnReload()
 
   useEffect(() => {
     const fetchOrderSummary = async () => {
@@ -71,7 +81,30 @@ const Confirmation: React.FC = () => {
   }, [navigate]);
 
   const sendWhatsApp = (data: any) => {
-    //     const phone = 9345857852;
+    const phone = 9345857852;
+
+    const message = `
+    Order Confirmed ✅
+
+    Product: ${data.productTitle}
+    Plan: ${data.planTitle}
+    Size: ${data.size}
+    Quantity: ${data.quantity}
+    Phone Number: ${data.phone}
+    Total Amount: ${data.totalAmount}
+
+
+    Shipping Address:
+    ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.pincode}
+
+    – The Techys Studio
+      `.trim();
+
+    const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+
+    //     const instaUsername = "the_techys_studio"; // without @
 
     //     const message = `
     // Order Confirmed ✅
@@ -80,39 +113,20 @@ const Confirmation: React.FC = () => {
     // Plan: ${data.planTitle}
     // Size: ${data.size}
     // Quantity: ${data.quantity}
+    // Phone Number: ${data.phone}
     // Total Amount: ${data.totalAmount}
-
 
     // Shipping Address:
     // ${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.pincode}
 
     // – The Techys Studio
-    //   `.trim();
+    // `.trim();
 
-    //     const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
+    //     const url = `https://ig.me/m/${instaUsername}?text=${encodeURIComponent(message)}`;
 
     //     window.open(url, "_blank");
-
-    const instaUsername = "the_techys_studio"; // without @
-
-    const message = `
-Order Confirmed ✅
-
-Product: ${data.productTitle}
-Plan: ${data.planTitle}
-Size: ${data.size}
-Quantity: ${data.quantity}
-Total Amount: ${data.totalAmount}
-
-Shipping Address:
-${data.doorNoAndStreet}, ${data.city}, ${data.district}, ${data.state}, ${data.pincode}
-
-– The Techys Studio
-`.trim();
-
-    const url = `https://ig.me/m/${instaUsername}?text=${encodeURIComponent(message)}`;
-
-    window.open(url, "_blank");
+    //     localStorage.removeItem('orderConfirmed');
+    //     localStorage.removeItem('order');
 
   };
 

@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useErrorStatus } from "../services/errorStatus";
+import { useScrollToTopOnReload } from "../components/reload";
 
 const BACKEND_URL = "https://api.shop.drmcetit.com/api";
 
@@ -39,6 +40,8 @@ type OrderDetailsType = {
     city?: string;
     state?: string;
     pincode?: string;
+
+    phone?:string
 };
 
 const OrdersDetails: React.FC = () => {
@@ -49,6 +52,9 @@ const OrdersDetails: React.FC = () => {
     const { errorStatus } = useErrorStatus();
     const { id } = useParams();
     const navigate = useNavigate();
+
+    // Scroll to top on reload
+    useScrollToTopOnReload()
 
     const checkAuth = () => {
         const token = localStorage.getItem("accessToken");
@@ -472,6 +478,9 @@ const OrdersDetails: React.FC = () => {
                                                 <p>
                                                     {(orderDetails.state || "—") +
                                                         (orderDetails.pincode ? ` - ${orderDetails.pincode}` : "")}
+                                                </p>
+                                                <p>
+                                                    {orderDetails.phone || "—" }
                                                 </p>
                                             </div>
 
