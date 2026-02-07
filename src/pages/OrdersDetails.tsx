@@ -126,6 +126,36 @@ const OrdersDetails: React.FC = () => {
         window.URL.revokeObjectURL(url);
     };
 
+    const handleInvoice = async (id: string) => {
+        try {
+            const res = await axios.get(
+                `${BACKEND_URL}/invoice/${id}`,
+                {
+                    responseType: "blob", // 👈 VERY IMPORTANT
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                }
+            );
+
+            // Create download URL
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `invoice-${id}.pdf`; // file name
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err: any) {
+            console.error(err);
+            errorStatus(err?.response?.data || err?.response?.error || "Invoice download failed");
+        }
+    };
+
 
     return (
 
@@ -255,12 +285,12 @@ const OrdersDetails: React.FC = () => {
                   >
                     Print
                   </button> */}
-                                    {/* <button
-                    className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 transition"
-                    onClick={() => alert("Invoice feature can be added here")}
-                  >
-                    Invoice
-                  </button> */}
+                                    {orderDetails.orderCompleted === true && <button
+                                        className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 transition"
+                                        onClick={() => handleInvoice(id)}
+                                    >
+                                        Invoice
+                                    </button>}
                                     <button
                                         className="rounded-full cursor-pointer bg-gray-900 px-4 py-2 text-sm text-white shadow-sm hover:bg-black transition"
                                         onClick={() => window.open("https://ig.me/m/the_techys_studio", "_blank")}
@@ -287,7 +317,7 @@ const OrdersDetails: React.FC = () => {
                                                         />
                                                     ) : (
                                                         <div className="flex h-full w-full items-center justify-center text-xs text-gray-400">
-                                                            No image
+                                                            This Plan Has No image
                                                         </div>
                                                     )}
                                                 </div>

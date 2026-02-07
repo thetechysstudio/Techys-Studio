@@ -72,6 +72,37 @@ const Orders: React.FC = () => {
         fetchOrders();
     }, []);
 
+    const handleInvoice = async (id: string) => {
+        try {
+            const res = await axios.get(
+                `${BACKEND_URL}/invoice/${id}`,
+                {
+                    responseType: "blob", // 👈 VERY IMPORTANT
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    },
+                }
+            );
+
+            // Create download URL
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `invoice-${id}.pdf`; // file name
+            document.body.appendChild(link);
+            link.click();
+
+            // Cleanup
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err: any) {
+            console.error(err);
+            errorStatus(err?.response?.data || err?.response?.error || "Invoice download failed");
+        }
+    };
+
+
     const filtered = useMemo(() => {
         const q = query.trim().toLowerCase();
 
@@ -259,7 +290,7 @@ const Orders: React.FC = () => {
                                     <div className="flex flex-col gap-4 p-4 md:flex-row md:items-center">
                                         <div className="h-50 object-contain w-full overflow-hidden rounded-lg border border-black/10 bg-gray-50 md:h-24 md:w-40">
                                             <img
-                                                src={`https://api.shop.drmcetit.com/${order.image}`}
+                                                src={order.image ? `https://api.shop.drmcetit.com/${order.image}` : "/The-Techys-Studio.jpeg"}
                                                 alt={order.productTitle}
                                                 className="h-full w-full object-contain"
                                                 loading="lazy"
@@ -285,9 +316,9 @@ const Orders: React.FC = () => {
                                                 {/* <button className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 transition">
                                                     Buy again
                                                 </button> */}
-                                                {/* <button className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 transition">
+                                                {order.orderCompleted === true && <button onClick={() => handleInvoice(order.id)} className="rounded-full border border-black/10 bg-white px-4 py-2 text-sm text-gray-700 shadow-sm hover:bg-gray-50 transition" >
                                                     Invoice
-                                                </button> */}
+                                                </button>}
                                                 <button
                                                     type="button"
                                                     onClick={() => window.open("https://ig.me/m/the_techys_studio", "_blank")}
